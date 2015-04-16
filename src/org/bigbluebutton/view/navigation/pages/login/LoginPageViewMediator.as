@@ -93,6 +93,7 @@ package org.bigbluebutton.view.navigation.pages.login
 
 				//url = "bigbluebutton://test-install.blindsidenetworks.com/bigbluebutton/api/join?fullName=Air&meetingID=Demo+Meeting&password=ap&checksum=512620179852dadd6fe0665a48bcb852a3c0afac";
 				//url = "bigbluebutton://lab1.mconf.org/bigbluebutton/api/join?fullName=Air+client&meetingID=Test+room+4&password=prof123&checksum=5805753edd08fbf9af50f9c28bb676c7e5241349"
+				url = "bigbluebutton://143.54.10.103/bigbluebutton/api/join?fullName=User+2242495&meetingID=random-2835859&password=mp&checksum=b9d6ee63cd24893e790981fbe0265a8a1fc343b3";
 			}
 
 			if (url.lastIndexOf("://") != -1)
