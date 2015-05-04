@@ -12,6 +12,8 @@
 			   creationComplete="creationCompleteHandler(event)"
 			   applicationComplete="applicationCompleteHandler(event)" 	
 			   runtimeDPIProvider = "CustomRuntimeDPIProvider"
+			   xmlns:micbutton="org.bigbluebutton.view.ui.micbutton.*"
+			   xmlns:videobutton="org.bigbluebutton.view.ui.videobutton.*"
 			   >
 	<fx:Style source="Default.css"/>
 	
@@ -22,6 +24,8 @@
 	<fx:Script>
 		<![CDATA[
 			import com.adobe.utils.LocaleUtil;
+			import com.juankpro.ane.localnotif.Notification;
+			import com.juankpro.ane.localnotif.NotificationManager;
 			
 			import flash.system.Capabilities;
 			
@@ -53,11 +57,12 @@
 			import org.bigbluebutton.view.navigation.pages.selectparticipant.SelectParticipantConfig;
 			import org.bigbluebutton.view.navigation.pages.userdetails.UserDetaisConfig;
 			import org.bigbluebutton.view.navigation.pages.videochat.VideoChatConfig;
-			import org.bigbluebutton.view.ui.MicButtonConfig;
 			import org.bigbluebutton.view.ui.NavigationButtonConfig;
 			import org.bigbluebutton.view.ui.RecordingStatusConfig;
 			import org.bigbluebutton.view.ui.SwapCameraConfig;
 			import org.bigbluebutton.view.ui.loading.LoadingScreenConfig;
+			import org.bigbluebutton.view.ui.micbutton.MicButtonConfig;
+			import org.bigbluebutton.view.ui.videobutton.VideoButtonConfig;
 			import org.osmf.logging.Log;
 			import org.osmf.logging.Logger;
 			
@@ -70,6 +75,7 @@
 			
 			protected var context: IContext;
 			
+			private var notificationManager:NotificationManager  = new NotificationManager();
 			private var _orientationCalc:OrientationCalculator;
 			public var currentOrientation:String;
 			
@@ -126,6 +132,7 @@
 					.configure(ParticipantsConfig)
 					.configure(SelectParticipantConfig)		
 					.configure(MicButtonConfig)
+					.configure(VideoButtonConfig)
 					.configure(NavigationButtonConfig)
 					.configure(SwapCameraConfig)
 					.configure(ExitPageConfig)
@@ -170,8 +177,10 @@
 			
 			protected function applicationCompleteHandler(event:FlexEvent):void
 			{
+				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
 				stage.addEventListener(Event.ACTIVATE, fl_Activate);
 				stage.addEventListener(Event.DEACTIVATE, fl_Deactivate);
+				stage.addEventListener(Event.CLOSE, closeApplication);
 				
 				stage.addEventListener(StageOrientationEvent.ORIENTATION_CHANGING, stageOrientationChangingHandler);
 				
@@ -181,12 +190,24 @@
 				currentOrientation = _orientationCalc.currentOrientation;
 			}
 			
+			private function closeApplication(event:Event=null):void {
+				notificationManager.cancel("running");
+			}
+			
 			private function fl_Activate(event:Event=null):void {
 				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
+				notificationManager.cancel("running");
 			}
 			
 			private function fl_Deactivate(event:Event):void {
 				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.NORMAL;
+				var notification:Notification = new Notification();
+				notification.body = resourceManager.getString('resources', 'notification.message');
+				notification.title = resourceManager.getString('resources', 'notification.title');
+				notification.fireDate = new Date((new Date()).time);
+				notification.ongoing = true;
+				notification.vibrate = false;
+				notificationManager.notifyUser("running", notification);
 			}
 			
 			private function stageOrientationChangingHandler(e:StageOrientationEvent):void {
@@ -221,7 +242,8 @@
 				</s:Group>
 				<s:Label id="pageName" styleName="pageNameStyle" width="100%" height="100%"/>
 				<ui:RecordingStatus id="recordingStatus" styleName="recordingStatusIconStyle topButtonStyle"/>
-				<ui:MicButton id="microphoneBtn" styleName="micButtonStyle topButtonStyle"/>
+				<videobutton:VideoButton id="videoBtn" styleName="videoButtonStyle topButtonStyle"/>
+				<micbutton:MicButton id="microphoneBtn" styleName="micButtonStyle topButtonStyle"/>
 			</s:HGroup>
 		</s:SkinnableContainer>
 

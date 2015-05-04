@@ -1,19 +1,15 @@
-package org.bigbluebutton.view.navigation.pages.userdetails
+package org.bigbluebutton.view.ui.micbutton
 {
+	import org.bigbluebutton.command.MicrophoneMuteCommand;
+	import org.bigbluebutton.command.MicrophoneMuteSignal;
 	
 	import robotlegs.bender.extensions.mediatorMap.api.IMediatorMap;
 	import robotlegs.bender.extensions.signalCommandMap.api.ISignalCommandMap;
 	import robotlegs.bender.framework.api.IConfig;
 	import robotlegs.bender.framework.api.IInjector;
 
-	import org.bigbluebutton.command.ChangeRoleCommand;
-	import org.bigbluebutton.command.ChangeRoleSignal;
-	import org.bigbluebutton.command.ClearUserStatusCommand;
-	import org.bigbluebutton.command.ClearUserStatusSignal;
-	import org.bigbluebutton.command.PresenterCommand;
-	import org.bigbluebutton.command.PresenterSignal;
 
-	public class UserDetaisConfig implements IConfig
+	public class MicButtonConfig implements IConfig
 	{
 		[Inject]
 		public var injector: IInjector;
@@ -46,7 +42,7 @@ package org.bigbluebutton.view.navigation.pages.userdetails
 		 */
 		private function mediators(): void
 		{
-			mediatorMap.map(IUserDetaisView).toMediator(UserDetaisViewMediator);
+			mediatorMap.map(IMicButton).toMediator(MicButtonMediator);
 		}
 		
 		/**
@@ -54,10 +50,7 @@ package org.bigbluebutton.view.navigation.pages.userdetails
 		 */
 		private function signals(): void
 		{
-			signalCommandMap.map(ClearUserStatusSignal).toCommand(ClearUserStatusCommand);
-			signalCommandMap.map(PresenterSignal).toCommand(PresenterCommand);
-			signalCommandMap.map(ChangeRoleSignal).toCommand(ChangeRoleCommand);
-			//signalCommandMap.map(ButtonTestSignal).toCommand(ButtonTestCommand);
+			signalCommandMap.map(MicrophoneMuteSignal).toCommand(MicrophoneMuteCommand);
 		}	
 	}
 }
