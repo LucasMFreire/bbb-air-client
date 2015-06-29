@@ -424,6 +424,11 @@ global
 		backgroundImage: Embed(source="assets/res/drawable-mdpi/video.png");
 	}
 	
+	s|Button.videoOffButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-mdpi/video_off.png");
+	}
+	
 	s|Image.iconStyle
 	{
 		width: 32;
@@ -548,7 +553,7 @@ global
 	
 	s|Image.bbbLogoStyle
 	{
-		imageSource: Embed(source="assets/res/drawable-mdpi/ic_launcher.png");
+		imageSource: Embed(source="assets/res/drawable-mdpi/logo.png");
 	}
 }
 
@@ -821,6 +826,11 @@ global
 		backgroundImage: Embed(source="assets/res/drawable-hdpi/video.png");
 	}
 	
+	s|Button.videoOffButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-hdpi/video_off.png");
+	}
+	
 	s|Image.iconStyle
 	{
 		width: 48;
@@ -945,7 +955,7 @@ global
 	
 	s|Image.bbbLogoStyle
 	{
-		imageSource: Embed(source="assets/res/drawable-hdpi/ic_launcher.png");
+		imageSource: Embed(source="assets/res/drawable-hdpi/logo.png");
 	}
 }
 
@@ -1218,6 +1228,11 @@ global
 		backgroundImage: Embed(source="assets/res/drawable-xhdpi/video.png");
 	}
 	
+	s|Button.videoOffButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-xhdpi/video_off.png");
+	}
+	
 	s|Image.iconStyle
 	{
 		width: 64;
@@ -1342,7 +1357,7 @@ global
 	
 	s|Image.bbbLogoStyle
 	{
-		imageSource: Embed(source="assets/res/drawable-xhdpi/ic_launcher.png");
+		imageSource: Embed(source="assets/res/drawable-xhdpi/logo.png");
 	}
 }
 
@@ -1616,6 +1631,11 @@ global
 		backgroundImage: Embed(source="assets/res/drawable-xxhdpi/video.png");
 	}
 	
+	s|Button.videoOffButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-xxhdpi/video_off.png");
+	}
+	
 	s|Image.iconStyle
 	{
 		width: 96;
@@ -1730,7 +1750,7 @@ global
 	
 	s|Image.bbbLogoStyle
 	{
-		imageSource: Embed(source="assets/res/drawable-xxhdpi/ic_launcher.png");
+		imageSource: Embed(source="assets/res/drawable-xxhdpi/logo.png");
 	}
 	
 	s|RadioButton
