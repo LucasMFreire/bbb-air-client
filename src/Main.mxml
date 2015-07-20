@@ -54,6 +54,7 @@
 			import org.bigbluebutton.view.navigation.pages.status.StatusConfig;
 			import org.bigbluebutton.view.navigation.pages.userdetails.UserDetaisConfig;
 			import org.bigbluebutton.view.navigation.pages.videochat.VideoChatConfig;
+			import org.bigbluebutton.view.navigation.pages.whiteboard.WhiteboardConfig;
 			import org.bigbluebutton.view.ui.NavigationButtonConfig;
 			import org.bigbluebutton.view.ui.RecordingStatusConfig;
 			import org.bigbluebutton.view.ui.SwapCameraConfig;
@@ -137,7 +138,7 @@
 					.configure(CameraSettingsConfig)
 					.configure(AudioSettingsConfig)
 					.configure(MenuButtonsConfig)
-					
+					.configure(WhiteboardConfig)
 					.configure(new ContextView(this));
 				// If you wish to change the log level then uncomment the line below and set 
 				// the logLevel to the value you desire. The default logLevel is DEBUG, which 
@@ -222,7 +223,9 @@
 				<ui:RecordingStatus id="recordingStatus"
 									styleName="recordingStatusIconStyle topButtonStyle"
 									visible="false" />
-				<videobutton:VideoButton id="videoBtn"
+				<videobutton:VideoButton visible="false"
+										 includeInLayout="false"
+										 id="videoBtn"
 										 styleName="videoButtonStyle topButtonStyle" />
 				<micbutton:MicButton id="microphoneBtn"
 									 styleName="micButtonStyle topButtonStyle" />

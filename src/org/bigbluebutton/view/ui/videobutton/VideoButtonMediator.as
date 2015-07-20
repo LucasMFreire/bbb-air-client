@@ -28,9 +28,13 @@ package org.bigbluebutton.view.ui.videobutton {
 		 */
 		override public function initialize():void {
 			(view as VideoButton).addEventListener(MouseEvent.CLICK, mouseEventClickHandler);
+			userSession.successJoiningMeetingSignal.add(meetingJoined);
+			(view as VideoButton).addEventListener(MouseEvent.CLICK, mouseEventClickHandler);
 			userSession.userList.userChangeSignal.add(userChangeHandler);
+		}
+		
+		private function meetingJoined():void {
 			view.setVisibility(true);
-			//view.setVisibility(userSession.userList.me.hasStream);
 		}
 		
 		/**

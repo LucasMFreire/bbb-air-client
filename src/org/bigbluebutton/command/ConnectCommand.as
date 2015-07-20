@@ -14,6 +14,7 @@ package org.bigbluebutton.command {
 	import org.bigbluebutton.core.IUsersService;
 	import org.bigbluebutton.core.IVideoConnection;
 	import org.bigbluebutton.core.IVoiceConnection;
+	import org.bigbluebutton.core.IWhiteboardService;
 	import org.bigbluebutton.model.IConferenceParameters;
 	import org.bigbluebutton.model.IUserSession;
 	import org.bigbluebutton.model.IUserUISession;
@@ -60,6 +61,9 @@ package org.bigbluebutton.command {
 		public var presentationService:IPresentationService;
 		
 		[Inject]
+		public var whiteboardService:IWhiteboardService;
+		
+		[Inject]
 		public var disconnectUserSignal:DisconnectUserSignal;
 		
 		[Inject]
@@ -83,6 +87,7 @@ package org.bigbluebutton.command {
 			trace(LOG + "successConnected()");
 			userSession.mainConnection = connection;
 			chatService.setupMessageSenderReceiver();
+			whiteboardService.setupMessageSenderReceiver();
 			userSession.userId = connection.userId;
 			// Set up users message sender in order to send the "joinMeeting" message:
 			usersService.setupMessageSenderReceiver();

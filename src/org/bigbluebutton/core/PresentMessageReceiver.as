@@ -95,6 +95,7 @@ package org.bigbluebutton.core {
 		private function handleMoveCallback(m:Object):void {
 			var msg:Object = JSON.parse(m.msg);
 			trace("PresentMessageReceiver::handleMoveCallback()");
+			userSession.presentationList.setViewedRegion(msg.xOffset, msg.yOffset, msg.widthRatio, msg.heightRatio);
 		/* Properties of msg:
 		   current
 		   heightRatio
@@ -122,17 +123,7 @@ package org.bigbluebutton.core {
 		private function handlePresentationCursorUpdateCommand(m:Object):void {
 			var msg:Object = JSON.parse(m.msg);
 			trace("PresentMessageReceiver::handlePresentationCursorUpdateCommand() -- cursing moving [" + msg.xPercent + ", " + msg.yPercent + "]");
-		/* Properties of msg:
-		   xPercent
-		   yPercent
-		
-		   var e:CursorEvent = new CursorEvent(CursorEvent.UPDATE_CURSOR);
-		   e.xPercent = msg.xPercent;
-		   e.yPercent = msg.yPercent;
-		   var dispatcher:Dispatcher = new Dispatcher();
-		   dispatcher.dispatchEvent(e);
-		
-		 */
+			userSession.presentationList.cursorUpdate(msg.xPercent, msg.yPercent);
 		}
 		
 		private function handleRemovePresentationCallback(m:Object):void {
@@ -182,7 +173,7 @@ package org.bigbluebutton.core {
 			// Add all the slides to the presentation:
 			for (var i:int = 0; i < length; i++) {
 				var s:Object = presentationObject.pages[i];
-				presentation.add(new Slide(s.num, s.swfUri, s.thumbUri, s.txtUri, s.current));
+				presentation.add(new Slide(s.num, s.swfUri, s.thumbUri, s.txtUri, s.current, s.xOffset, s.yOffset, s.widthRatio, s.heightRatio));
 			}
 			if (presentation.current) {
 				presentation.show();

@@ -102,6 +102,7 @@ package org.bigbluebutton.view.navigation.pages.camerasettings {
 		private function userChangeHandler(user:User, type:int):void {
 			if (user.me) {
 				if (type == UserList.HAS_STREAM) {
+					setRotateCameraButtonEnable(!user.hasStream);
 					view.startCameraButton.label = ResourceManager.getInstance().getString('resources', user.hasStream ? 'profile.settings.camera.on' : 'profile.settings.camera.off');
 					if (Camera.names.length > 1) {
 						setSwapCameraButtonEnable(true)
