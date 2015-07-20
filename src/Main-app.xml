@@ -27,7 +27,7 @@
 	<!-- A string value of the format <0-999>.<0-999>.<0-999> that represents application version which can be used to check for application upgrade.
 	Values can also be 1-part or 2-part. It is not necessary to have a 3-part value.
 	An updated version of application must have a versionNumber value higher than the previous version. Required for namespace >= 2.5 . -->
-	<versionNumber>0.6.3</versionNumber>
+	<versionNumber>0.6.5</versionNumber>
 
 	<!-- Whether the application can be launched when the user clicks a link in a web browser. Optional. Default false. -->
 	<allowBrowserInvocation>true</allowBrowserInvocation>
@@ -247,7 +247,9 @@
 			    <!--Removing the permission android.permission.INTERNET will have the side effect
 		of preventing you from debugging your application on your device-->
 			    <uses-permission android:name="android.permission.INTERNET"/>
+			    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 			    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+			    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 			    <!--The DISABLE_KEYGUARD and WAKE_LOCK permissions should be toggled together
 		in order to access AIR's SystemIdleMode APIs-->
 			    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>

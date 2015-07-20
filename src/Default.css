@@ -15,6 +15,13 @@ s|Group.videoTextFieldStyle
 	color: #FFFFFF;
 }
 
+s|ToggleSwitch.lockSettingsToggleSwitch
+{
+	chromeColor:#F4F4F4;
+	accentColor:#43434B;
+	skinClass:    ClassReference("spark.skins.mobile.ToggleSwitchSkin");
+}
+
 s|Button.sendButtonStyle
 {
 	backgroundColor:#FFFFFF;
@@ -80,7 +87,7 @@ s|Button.videoAudioSettingStyle
 	skinClass: ClassReference("org.bigbluebutton.view.skins.VideoAudioSettingsBtnSkin");
 }
 
-s|Button.profileSettingsButtonStyle,s|Button.audioSettingsShareMicButtonStyle, s|Button.audioSettingsListenOnlyButtonStyle
+s|Button.profileSettingsButtonStyle,s|Button.chatButtonStyle,s|Button.audioSettingsShareMicButtonStyle, s|Button.clearButtonStyle, s|Button.lowerAllHandsButtonStyle, s|Button.MuteButtonStyle, s|Button.audioSettingsListenOnlyButtonStyle, s|Button.raiseHandButtonStyle
 {
 	labelTextAlign:left;
 }
@@ -96,7 +103,7 @@ s|Label.pageNameStyle
 	color: #FFFFFF;
 }
 
-s|Label.participantStatusStyle
+s|Label.participantStatusStyle, s|Label.roomUrlStyle
 {
 	color: #999999;
 }
@@ -251,7 +258,7 @@ global
 		weight:0.1;
 	}
 	
-	s|Label.chatRoomLabelStyle,s|Label.selectParticipantLabelStyle
+	s|Label.chatRoomLabelStyle,s|Label.selectParticipantLabelStyle, s|Label.RoomLabelStyle
 	{
 		paddingLeft:6;
 		paddingTop:20;
@@ -286,7 +293,12 @@ global
 		fontSize:14;
 	}
 	
-	s|ItemRenderer.participantItemStyle
+	.dateAndTimeFontSize
+	{
+		fontSize:12;
+	}
+	
+	s|ItemRenderer.participantItemStyle, s|ItemRenderer.roomItemStyle
 	{
 		itemHeight:64;
 		lineColor: #F2F2F2;
@@ -392,6 +404,31 @@ global
 		backgroundImage: Embed(source="assets/res/drawable-mdpi/microphone.png");
 	}
 	
+	s|Button.chatButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-mdpi/chat.png");
+	}
+	
+	s|Button.MuteButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-mdpi/micOffIcon_dark.png");
+	}
+	
+	s|Button.clearButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-mdpi/clear.png");
+	}
+	
+	s|Button.lowerAllHandsButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-mdpi/icon-3-high-five.png");
+	}
+	
+	s|Button.raiseHandButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-mdpi/icon-3-high-five.png");
+	}
+	
 	s|Button.audioSettingsListenOnlyButtonStyle
 	{
 		backgroundImage: Embed(source="assets/res/drawable-mdpi/sound.png");
@@ -450,6 +487,16 @@ global
 	s|Image.micIconStyle
 	{
 		backgroundImage: Embed(source="assets/res/drawable-mdpi/microphone.png");
+	}
+	
+	s|Image.speakingMicIconStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-mdpi/microphone_talk.png");
+	}
+	
+	s|Image.lockIconStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-mdpi/lock.png");
 	}
 	
 	s|Image.listenOnlyIconStyle
@@ -653,7 +700,7 @@ global
 		weight:0.15;
 	}
 	
-	s|Label.chatRoomLabelStyle,s|Label.selectParticipantLabelStyle
+	s|Label.chatRoomLabelStyle,s|Label.selectParticipantLabelStyle, s|Label.RoomLabelStyle
 	{
 		paddingLeft:9;
 		paddingTop:30;
@@ -694,7 +741,12 @@ global
 		fontSize:21;
 	}
 	
-	s|ItemRenderer.participantItemStyle
+	.dateAndTimeFontSize
+	{
+		fontSize:18;
+	}
+	
+	s|ItemRenderer.participantItemStyle, s|ItemRenderer.roomItemStyle
 	{
 		itemHeight:96;
 		lineColor: #F2F2F2;
@@ -768,6 +820,31 @@ global
 	s|Button.audioSettingsShareMicButtonStyle
 	{
 		backgroundImage: Embed(source="assets/res/drawable-hdpi/microphone.png");
+	}
+	
+	s|Button.chatButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-hdpi/chat.png");
+	}
+	
+	s|Button.MuteButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-hdpi/micOffIcon_dark.png");
+	}
+	
+	s|Button.clearButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-hdpi/clear.png");
+	}
+	
+	s|Button.lowerAllHandsButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-hdpi/icon-3-high-five.png");
+	}
+	
+	s|Button.raiseHandButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-hdpi/icon-3-high-five.png");
 	}
 	
 	s|Button.audioSettingsListenOnlyButtonStyle
@@ -852,6 +929,16 @@ global
 	s|Image.micIconStyle
 	{
 		backgroundImage: Embed(source="assets/res/drawable-hdpi/microphone.png");
+	}
+	
+	s|Image.speakingMicIconStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-hdpi/microphone_talk.png");
+	}
+	
+	s|Image.lockIconStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-hdpi/lock.png");
 	}
 	
 	s|Image.micOffIconStyle
@@ -1023,7 +1110,7 @@ global
 		paddingTop:80;
 	}
 	
-	s|Label.chatRoomLabelStyle,s|Label.selectParticipantLabelStyle
+	s|Label.chatRoomLabelStyle,s|Label.selectParticipantLabelStyle, s|Label.RoomLabelStyle
 	{
 		paddingLeft:12;
 		paddingTop:40;
@@ -1096,7 +1183,12 @@ global
 		fontSize:28;
 	}
 	
-	s|ItemRenderer.participantItemStyle
+	.dateAndTimeFontSize
+	{
+		fontSize:24;
+	}
+	
+	s|ItemRenderer.participantItemStyle, s|ItemRenderer.roomItemStyle
 	{
 		itemHeight:128;
 		lineColor: #F2F2F2;
@@ -1170,6 +1262,31 @@ global
 	s|Button.audioSettingsShareMicButtonStyle
 	{
 		backgroundImage: Embed(source="assets/res/drawable-xhdpi/microphone.png");
+	}
+	
+	s|Button.chatButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-xhdpi/chat.png");
+	}
+	
+	s|Button.MuteButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-xhdpi/micOffIcon_dark.png");
+	}
+	
+	s|Button.clearButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-xhdpi/clear.png");
+	}
+	
+	s|Button.lowerAllHandsButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-xhdpi/icon-3-high-five.png");
+	}
+	
+	s|Button.raiseHandButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-xhdpi/icon-3-high-five.png");
 	}
 	
 	s|Button.audioSettingsListenOnlyButtonStyle
@@ -1254,6 +1371,16 @@ global
 	s|Image.micIconStyle
 	{
 		backgroundImage: Embed(source="assets/res/drawable-xhdpi/microphone.png");
+	}
+	
+	s|Image.speakingMicIconStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-xhdpi/microphone_talk.png");
+	}
+	
+	s|Image.lockIconStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-xhdpi/lock.png");
 	}
 	
 	s|Image.micOffIconStyle
@@ -1425,7 +1552,7 @@ global
 		paddingTop:120;
 	}
 	
-	s|Label.chatRoomLabelStyle,s|Label.selectParticipantLabelStyle
+	s|Label.chatRoomLabelStyle,s|Label.selectParticipantLabelStyle,s|Label.RoomLabelStyle
 	{
 		paddingLeft:18;
 		paddingTop:60;
@@ -1492,7 +1619,12 @@ global
 		fontSize:42;
 	}
 	
-	s|ItemRenderer.participantItemStyle
+	.dateAndTimeFontSize
+	{
+		fontSize:36;
+	}
+	
+	s|ItemRenderer.participantItemStyle, s|ItemRenderer.roomItemStyle
 	{
 		itemHeight:192;
 		lineColor: #F2F2F2;
@@ -1599,6 +1731,31 @@ global
 		backgroundImage: Embed(source="assets/res/drawable-xxhdpi/microphone.png");
 	}
 	
+	s|Button.chatButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-xxhdpi/chat.png");
+	}
+	
+	s|Button.MuteButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-xxhdpi/micOffIcon_dark.png");
+	}
+	
+	s|Button.clearButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-xxhdpi/clear.png");
+	}
+	
+	s|Button.lowerAllHandsButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-xxhdpi/icon-3-high-five.png");
+	}
+	
+	s|Button.raiseHandButtonStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-xxhdpi/icon-3-high-five.png");
+	}
+	
 	s|Button.audioSettingsListenOnlyButtonStyle
 	{
 		backgroundImage: Embed(source="assets/res/drawable-xxhdpi/sound.png");
@@ -1657,6 +1814,16 @@ global
 	s|Image.micIconStyle
 	{
 		backgroundImage: Embed(source="assets/res/drawable-xxhdpi/microphone.png");
+	}
+	
+	s|Image.speakingMicIconStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-xxhdpi/microphone_talk.png");
+	}
+	
+	s|Image.lockIconStyle
+	{
+		backgroundImage: Embed(source="assets/res/drawable-xxhdpi/lock.png");
 	}
 	
 	s|Image.micOffIconStyle

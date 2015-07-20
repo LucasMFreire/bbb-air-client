@@ -1,67 +1,67 @@
-package org.bigbluebutton.view.navigation.pages.login
-{
+package org.bigbluebutton.view.navigation.pages.login {
+	
 	import flash.desktop.NativeApplication;
 	import flash.events.Event;
 	import flash.events.InvokeEvent;
 	import flash.events.MouseEvent;
 	import flash.filesystem.File;
+	import flash.net.URLVariables;
 	import flash.system.Capabilities;
-
+	import mx.collections.ArrayCollection;
 	import mx.core.FlexGlobals;
-
 	import org.bigbluebutton.command.JoinMeetingSignal;
 	import org.bigbluebutton.core.ILoginService;
+	import org.bigbluebutton.core.ISaveData;
 	import org.bigbluebutton.model.IUserSession;
 	import org.bigbluebutton.model.IUserUISession;
 	import org.bigbluebutton.model.UserSession;
 	import org.bigbluebutton.model.UserUISession;
 	import org.bigbluebutton.view.navigation.IPagesNavigatorView;
 	import org.bigbluebutton.view.navigation.pages.PagesENUM;
+	import org.bigbluebutton.view.navigation.pages.login.rooms.Room;
 	import org.flexunit.internals.namespaces.classInternal;
-	import org.osmf.logging.Log;
-
 	import robotlegs.bender.bundles.mvcs.Mediator;
-
 	import spark.components.Application;
-
-	public class LoginPageViewMediator extends Mediator
-	{
+	
+	public class LoginPageViewMediator extends Mediator {
+		private const LOG:String = "LoginPageViewMediator::";
+		
 		[Inject]
-		public var view: ILoginPageView;
-
+		public var view:ILoginPageView;
+		
 		[Inject]
-		public var joinMeetingSignal: JoinMeetingSignal;
-
+		public var joinMeetingSignal:JoinMeetingSignal;
+		
 		[Inject]
-		public var loginService: ILoginService;
-
+		public var loginService:ILoginService;
+		
 		[Inject]
-		public var userSession: IUserSession;
-
+		public var userSession:IUserSession;
+		
 		[Inject]
-		public var userUISession: IUserUISession;
-
-
-		override public function initialize():void
-		{
-			Log.getLogger("org.bigbluebutton").info(String(this));
-
+		public var userUISession:IUserUISession;
+		
+		[Inject]
+		public var saveData:ISaveData;
+		
+		private var count:Number = 0;
+		
+		override public function initialize():void {
 			//loginService.unsuccessJoinedSignal.add(onUnsucess);
 			userUISession.unsuccessJoined.add(onUnsucess);
-
 			view.tryAgainButton.addEventListener(MouseEvent.CLICK, tryAgain);
-			NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, onInvokeEvent);
+			joinRoom(userSession.joinUrl);
 		}
-
-		private function onUnsucess(reason:String):void 
-		{
-			Log.getLogger("org.bigbluebutton").info(String(this) + ":onUnsucess() " + reason);
-			FlexGlobals.topLevelApplication.topActionBar.visible=false;
-			FlexGlobals.topLevelApplication.bottomMenu.visible=false;
-
-			switch(reason) {
+		
+		private function onUnsucess(reason:String):void {
+			trace(LOG + "onUnsucess() " + reason);
+			FlexGlobals.topLevelApplication.topActionBar.visible = false;
+			FlexGlobals.topLevelApplication.bottomMenu.visible = false;
+			switch (reason) {
 				case "emptyJoinUrl":
-					view.currentState = LoginPageViewBase.STATE_NO_REDIRECT;
+					if (!saveData.read("rooms")) {
+						view.currentState = LoginPageViewBase.STATE_NO_REDIRECT;
+					}
 					break;
 				case "invalidMeetingIdentifier":
 					view.currentState = LoginPageViewBase.STATE_INVALID_MEETING_IDENTIFIER;
@@ -78,68 +78,60 @@ package org.bigbluebutton.view.navigation.pages.login
 				case "genericError":
 					view.currentState = LoginPageViewBase.STATE_GENERIC_ERROR;
 					break;
+				case "authTokenTimedOut":
+					view.currentState = LoginPageViewBase.STATE_AUTH_TOKEN_TIMEDOUT;
+					break;
+				case "authTokenInvalid":
+					view.currentState = LoginPageViewBase.STATE_AUTH_TOKEN_INVALID;
+					break;
 				default:
 					view.currentState = LoginPageViewBase.STATE_GENERIC_ERROR;
 					break;
 			}
 			// view.messageText.text = reason;
 		}
-
-		public function onInvokeEvent(invocation:InvokeEvent):void 
-		{
-			var url:String = "";
-			if(invocation.arguments.length > 0){
-				url = invocation.arguments[0].toString();
-			}
-			if(Capabilities.isDebugger)
-			{
+		
+		public function joinRoom(url:String) {
+			if (Capabilities.isDebugger) {
+				//saveData.save("rooms", null);
 				// test-install server no longer works with 0.9 mobile client
-
 				//url = "bigbluebutton://test-install.blindsidenetworks.com/bigbluebutton/api/join?fullName=Air&meetingID=Demo+Meeting&password=ap&checksum=512620179852dadd6fe0665a48bcb852a3c0afac";
-				//url = "bigbluebutton://lab1.mconf.org/bigbluebutton/api/join?fullName=Air+client&meetingID=Test+room+4&password=prof123&checksum=5805753edd08fbf9af50f9c28bb676c7e5241349"
-				url = "bigbluebutton://143.54.10.103/bigbluebutton/api/join?fullName=User+2242495&meetingID=random-2835859&password=mp&checksum=b9d6ee63cd24893e790981fbe0265a8a1fc343b3";
+				//url = "bigbluebutton://lab1.mconf.org/bigbluebut/api/join?fullName=User+4237921ton/api/join?fullName=Air+client&meetingID=Test+room+4&password=prof123&checksum=5805753edd08fbf9af50f9c28bb676c7e5241349"
+				//url = "bigbluebutton://143.54.10.103/bigbluebutton/api/join?fullName=User+4704407&meetingID=random-3458293&password=mp&redirect=true&checksum=9102efa4f55e8b920b7f14b1c6bcdee7e0bb9c62";
+				url = "bigbluebutton://143.54.10.103/bigbluebutton/api/join?fullName=User+9992269&meetingID=random-2183044&password=mp&redirect=true&checksum=81048b72813f56b2f07db9785bf8fc4897edbaec";
 			}
-
-			if (url.lastIndexOf("://") != -1)
-			{
-				NativeApplication.nativeApplication.removeEventListener(InvokeEvent.INVOKE, onInvokeEvent);	
-
+			if (!url) {
+				url = "";
+			}
+			if (url.lastIndexOf("://") != -1) {
 				url = getEndURL(url);
+			} else {
+				if (saveData.read("rooms")) {
+					userUISession.pushPage(PagesENUM.ROOMS);
+				}
 			}
-			else
-			{
-
-			}
-
 			joinMeetingSignal.dispatch(url);
 		}
-
+		
 		/**
 		 * Replace the schema with "http"
-		 */ 
-		protected function getEndURL(origin:String):String
-		{
+		 */
+		protected function getEndURL(origin:String):String {
 			return origin.replace('bigbluebutton://', 'http://');
 		}
-
-		override public function destroy():void
-		{
+		
+		override public function destroy():void {
 			super.destroy();
-
 			//loginService.unsuccessJoinedSignal.remove(onUnsucess);
 			userUISession.unsuccessJoined.remove(onUnsucess);
-
-			NativeApplication.nativeApplication.removeEventListener(InvokeEvent.INVOKE, onInvokeEvent);
-
 			view.dispose();
 			view = null;
 		}
 		
-		private function tryAgain(event:Event):void{
-			FlexGlobals.topLevelApplication.mainshell.visible=false;
+		private function tryAgain(event:Event):void {
+			FlexGlobals.topLevelApplication.mainshell.visible = false;
 			userUISession.popPage();
 			userUISession.pushPage(PagesENUM.LOGIN);
 		}
 	}
 }
-

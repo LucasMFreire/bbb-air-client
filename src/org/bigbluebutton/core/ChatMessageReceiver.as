@@ -1,44 +1,49 @@
-package org.bigbluebutton.core
-{
+package org.bigbluebutton.core {
+	
+	import mx.collections.ArrayCollection;
+	import mx.utils.ObjectUtil;
 	import org.bigbluebutton.model.IMessageListener;
 	import org.bigbluebutton.model.IUserSession;
 	import org.bigbluebutton.model.chat.ChatMessageVO;
 	import org.bigbluebutton.model.chat.IChatMessagesSession;
 	
-	public class ChatMessageReceiver implements IMessageListener
-	{		
-		public var userSession: IUserSession;
+	public class ChatMessageReceiver implements IMessageListener {
+		public var userSession:IUserSession;
 		
-		public var chatMessagesSession: IChatMessagesSession;
+		public var chatMessagesSession:IChatMessagesSession;
+		
+		[Inject]
+		public var chatService:IChatMessageService;
 		
 		public function ChatMessageReceiver(userSession:IUserSession, chatMessagesSession:IChatMessagesSession) {
 			this.userSession = userSession;
-			this.chatMessagesSession = chatMessagesSession ;
+			this.chatMessagesSession = chatMessagesSession;
 		}
 		
-		public function onMessage(messageName:String, message:Object):void
-		{
+		public function onMessage(messageName:String, message:Object):void {
 			switch (messageName) {
 				case "ChatReceivePublicMessageCommand":
 					handleChatReceivePublicMessageCommand(message);
-					break;			
+					break;
 				case "ChatReceivePrivateMessageCommand":
 					handleChatReceivePrivateMessageCommand(message);
-					break;	
+					break;
 				case "ChatRequestMessageHistoryReply":
 					handleChatRequestMessageHistoryReply(message);
-					break;	
+					break;
 				default:
 					//   LogUtil.warn("Cannot handle message [" + messageName + "]");
 			}
- 		}
+		}
 		
 		private function handleChatRequestMessageHistoryReply(message:Object):void {
-			var msg:Object = JSON.parse(message.msg);
-			trace("handleChatRequestMessageHistoryReply()");	
-			for (var i:int = 0; i < msg.length; i++) {
-				handleChatReceivePublicMessageCommand(msg[i]);
+			var messages = JSON.parse(message.msg as String);
+			var msgCount:Number = messages.length;
+			chatMessagesSession.publicChat.messages = new ArrayCollection();
+			for (var i:int = 0; i < msgCount; i++) {
+				handleChatReceivePublicMessageCommand(messages[i]);
 			}
+			userSession.loadedMessageHistorySignal.dispatch();
 		}
 		
 		private function handleChatReceivePublicMessageCommand(message:Object):void {
@@ -54,7 +59,6 @@ package org.bigbluebutton.core
 			msg.toUserID = message.toUserID;
 			msg.toUsername = message.toUsername;
 			msg.message = message.message;
-			
 			chatMessagesSession.publicChat.newChatMessage(msg);
 		}
 		
@@ -71,11 +75,9 @@ package org.bigbluebutton.core
 			msg.toUserID = message.toUserID;
 			msg.toUsername = message.toUsername;
 			msg.message = message.message;
-			
-			var userId:String = (msg.fromUserID == userSession.userId? msg.toUserID: msg.fromUserID);
-			var userName:String = (msg.fromUserID == userSession.userId? msg.toUsername: msg.fromUsername);
-			
-			chatMessagesSession.newPrivateMessage(userId, userName,  msg);
+			var userId:String = (msg.fromUserID == userSession.userId ? msg.toUserID : msg.fromUserID);
+			var userName:String = (msg.fromUserID == userSession.userId ? msg.toUsername : msg.fromUsername);
+			chatMessagesSession.newPrivateMessage(userId, userName, msg);
 		}
 	}
 }

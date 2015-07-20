@@ -1,37 +1,50 @@
-package org.bigbluebutton.model
-{
+package org.bigbluebutton.model {
+	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
-	
 	import mx.core.FlexGlobals;
+	import mx.utils.ObjectUtil;
 	import mx.utils.URLUtil;
-	
 	import org.bigbluebutton.command.JoinMeetingCommand;
 	import org.bigbluebutton.core.ILoginService;
 	import org.bigbluebutton.core.VideoProfile;
-		
+	
 	public class VideoProfileManager extends EventDispatcher {
-		
 		public static const PROFILES_XML:String = "client/conf/profiles.xml";
+		
 		public static const DEFAULT_FALLBACK_LOCALE:String = "en_US";
+		
 		private var _profiles:Array = new Array();
 		
-		private var _profileXML:XML;
-		
-		public function VideoProfileManager(profileXML:XML)
-		{
-			_profileXML = profileXML;
-		}
-		
-		public function getProfileTypes():void{
+		public function parseProfilesXml(profileXML:XML):void {
 			// first clear the array
 			_profiles.splice(0);
-						
-			var fallbackLocale:String = _profileXML.@fallbackLocale != undefined? _profileXML.@fallbackLocale.toString(): DEFAULT_FALLBACK_LOCALE;
-			for each (var profile:XML in _profileXML.children()) {
+			var fallbackLocale:String = profileXML.@fallbackLocale != undefined ? profileXML.@fallbackLocale.toString() : DEFAULT_FALLBACK_LOCALE;
+			for each (var profile:XML in profileXML.children()) {
 				_profiles.push(new VideoProfile(profile, fallbackLocale));
+			}
+		}
+		
+		public function parseConfigXml(configXML:XML):void {
+			var resolutionsString:String = configXML.@resolutions;
+			var resolutions:Array = resolutionsString.split(",");
+			for (var resolution in resolutions) {
+				var profileXml:XML = <profile></profile>
+				profileXml.@['id'] = resolutions[resolution];
+				profileXml.locale.en_US = resolutions[resolution];
+				profileXml.width = resolutions[resolution].split("x")[0];
+				profileXml.height = resolutions[resolution].split("x")[1];
+				profileXml.keyFrameInterval = configXML.@camKeyFrameInterval;
+				profileXml.modeFps = configXML.@camModeFps;
+				profileXml.qualityBandwidth = configXML.@camQualityBandwidth;
+				profileXml.qualityPicture = configXML.@camQualityPicture;
+				profileXml.enableH264 = configXML.@enableH264;
+				profileXml.h264Level = configXML.@h264Level;
+				profileXml.h264Profile = configXML.@h264Profile;
+				var profile:VideoProfile = new VideoProfile(profileXml, DEFAULT_FALLBACK_LOCALE);
+				_profiles.push(profile);
 			}
 		}
 		
@@ -39,7 +52,7 @@ package org.bigbluebutton.model
 			if (_profiles.length > 0) {
 				return _profiles;
 			} else {
-				return [ fallbackVideoProfile ];
+				return [fallbackVideoProfile];
 			}
 		}
 		
@@ -53,23 +66,20 @@ package org.bigbluebutton.model
 		}
 		
 		public function getVideoProfileByStreamName(streamName:String):VideoProfile {
-			var pattern:RegExp = new RegExp("([a-z]+)-([A-Za-z0-9]+)-\\d+", "");
-			if (pattern.test(streamName))
-			{
+			var pattern:RegExp = new RegExp("([a-z0-9]+)-([A-Za-z0-9_]+)-\\d+", "");
+			if (pattern.test(streamName)) {
 				var profileID:String = pattern.exec(streamName)[1]
 				for each (var profile:VideoProfile in _profiles) {
 					if (profile.id == profileID) {
 						return profile;
 					}
-				}	
+				}
 				return null;
-			}
-			else
-			{
+			} else {
 				return null;
 			}
 		}
-
+		
 		public function get defaultVideoProfile():VideoProfile {
 			for each (var profile:VideoProfile in _profiles) {
 				if (profile.defaultProfile) {
@@ -82,7 +92,7 @@ package org.bigbluebutton.model
 				return null;
 			}
 		}
-			
+		
 		public function get fallbackVideoProfile():VideoProfile {
 			return new VideoProfile(
 				<profile id="160x120" default="true">
@@ -102,20 +112,17 @@ package org.bigbluebutton.model
 				, DEFAULT_FALLBACK_LOCALE);
 		}
 		
-		
 		public function getProfileWithLowerResolution():VideoProfile {
 			if (_profiles.lenth <= 0) {
 				return fallbackVideoProfile;
 			}
-			
 			var lower:VideoProfile = _profiles[0];
 			for each (var profile:VideoProfile in _profiles) {
-				if (((profile.width)*(profile.height)) < ((lower.width)*(lower.height))) {
+				if (((profile.width) * (profile.height)) < ((lower.width) * (lower.height))) {
 					lower = profile;
 				}
 			}
 			return lower;
 		}
-	} 
+	}
 }
-

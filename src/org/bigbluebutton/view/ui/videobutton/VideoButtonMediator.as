@@ -7,7 +7,6 @@ package org.bigbluebutton.view.ui.videobutton {
 	import org.bigbluebutton.model.User;
 	import org.bigbluebutton.model.UserList;
 	import org.bigbluebutton.view.navigation.pages.PagesENUM;
-	import org.osmf.logging.Log;
 	import robotlegs.bender.bundles.mvcs.Mediator;
 	
 	public class VideoButtonMediator extends Mediator {
@@ -28,10 +27,10 @@ package org.bigbluebutton.view.ui.videobutton {
 		 * Initialize listeners and Mediator initial state
 		 */
 		override public function initialize():void {
-			Log.getLogger("org.bigbluebutton").info(String(this));
 			(view as VideoButton).addEventListener(MouseEvent.CLICK, mouseEventClickHandler);
 			userSession.userList.userChangeSignal.add(userChangeHandler);
 			view.setVisibility(true);
+			//view.setVisibility(userSession.userList.me.hasStream);
 		}
 		
 		/**

@@ -1,6 +1,6 @@
 package org.bigbluebutton.core {
 	
-	import org.bigbluebutton.command.DisconnectUserSignal;
+	import org.bigbluebutton.command.AuthenticationSignal;
 	import org.bigbluebutton.model.IConferenceParameters;
 	import org.bigbluebutton.model.IMessageListener;
 	import org.bigbluebutton.model.IUserSession;
@@ -17,7 +17,7 @@ package org.bigbluebutton.core {
 		public var userSession:IUserSession;
 		
 		[Inject]
-		public var disconnectUserSignal:DisconnectUserSignal;
+		public var authenticationSignal:AuthenticationSignal;
 		
 		public var usersMessageSender:UsersMessageSender;
 		
@@ -30,8 +30,9 @@ package org.bigbluebutton.core {
 		
 		public function setupMessageSenderReceiver():void {
 			usersMessageReceiver.userSession = userSession;
-			usersMessageReceiver.disconnectUserSignal = disconnectUserSignal;
+			usersMessageReceiver.authenticationSignal = authenticationSignal;
 			usersMessageSender.userSession = userSession;
+			usersMessageSender.conferenceParameters = conferenceParameters;
 			userSession.mainConnection.addMessageListener(usersMessageReceiver as IMessageListener);
 			userSession.logoutSignal.add(logout);
 		}
@@ -77,6 +78,13 @@ package org.bigbluebutton.core {
 		
 		public function changeMood(mood:String):void {
 			usersMessageSender.changeMood(userSession.userList.me.userID, mood);
+			if (!conferenceParameters.serverIsMconf) {
+				if (mood == User.RAISE_HAND) {
+					usersMessageSender.raiseHand();
+				} else if (mood == User.NO_STATUS) {
+					usersMessageSender.lowerHand(userSession.userList.me.userID, userSession.userList.me.userID);
+				}
+			}
 		}
 		
 		public function clearUserStatus(userID:String):void {
@@ -103,8 +111,12 @@ package org.bigbluebutton.core {
 			usersMessageSender.changeRecordingStatus(userID, recording);
 		}
 		
-		public function muteAllUsers(mute:Boolean, dontMuteThese:Array = null):void {
-			usersMessageSender.muteAllUsers(mute, dontMuteThese);
+		public function muteAllUsers(mute:Boolean):void {
+			usersMessageSender.muteAllUsers(mute);
+		}
+		
+		public function muteAllUsersExceptPresenter(mute:Boolean):void {
+			usersMessageSender.muteAllUsersExceptPresenter(mute);
 		}
 		
 		public function muteUnmuteUser(userid:String, mute:Boolean):void {
@@ -143,14 +155,6 @@ package org.bigbluebutton.core {
 			usersMessageSender.sendJoinMeetingMessage(conferenceParameters.internalUserID);
 		}
 		
-		public function askToEnter():void {
-			usersMessageSender.askToEnter();
-		}
-		
-		public function getWaitingGuests():void {
-			usersMessageSender.getWaitingGuests();
-		}
-		
 		public function getGuestPolicy():void {
 			usersMessageSender.getGuestPolicy();
 		}
@@ -159,12 +163,16 @@ package org.bigbluebutton.core {
 			usersMessageSender.responseToGuest(userId, response);
 		}
 		
+		public function lowerHand(userID:String, loweredBy:String):void {
+			usersMessageSender.lowerHand(userID, loweredBy);
+		}
+		
 		public function responseToAllGuests(response:Boolean):void {
 			usersMessageSender.responseToAllGuests(response);
 		}
 		
 		public function validateToken():void {
-			usersMessageSender.validateToken(conferenceParameters.internalUserID);
+			usersMessageSender.validateToken(conferenceParameters.internalUserID, conferenceParameters.authToken);
 		}
 		
 		public function changeRole(userID:String, role:String):void {
