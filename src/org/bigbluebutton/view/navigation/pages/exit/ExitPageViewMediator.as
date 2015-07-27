@@ -78,10 +78,10 @@ package org.bigbluebutton.view.navigation.pages.exit {
 			userSession.logoutSignal.dispatch();
 			disconnectUserSignal.dispatch(DisconnectEnum.CONNECTION_STATUS_USER_LOGGED_OUT);
 			NativeApplication.nativeApplication.exit();
-			if (conferenceParameters.logoutUrl) {
-				var urlReq:URLRequest = new URLRequest(conferenceParameters.logoutUrl);
-				navigateToURL(urlReq);
-			}
+			//if (conferenceParameters.logoutUrl) {
+			//	var urlReq:URLRequest = new URLRequest(conferenceParameters.logoutUrl);
+			//	navigateToURL(urlReq);
+			//}
 		}
 		
 		private function backToApplication(event:Event):void {
